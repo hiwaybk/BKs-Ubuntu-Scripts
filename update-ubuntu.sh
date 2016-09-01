@@ -16,6 +16,54 @@ die() {
         exit "${RETVAL}"
 }
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  __prompt_user
+#   DESCRIPTION:  Prompt the user for input
+#    PARAMETERS:  Prompt to display to user
+#       RETURNS:  User input
+#-------------------------------------------------------------------------------
+__prompt_user() {
+	VAR="${1}"
+	PROMPT="${2}"
+	DEFAULT="${3}"
+
+    echo -n "${PROMPT}"
+    if [ "${DEFAULT}" ]; then
+	    echo -n " [${DEFAULT}]"
+    fi
+    echo -n ": "
+    read ANSWER
+
+	if [ "${ANSWER}" ]; then
+	    eval "$VAR='${ANSWER}'"
+	else
+	    eval "$VAR='${DEFAULT}'"
+	fi
+
+}
+
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  __do_reboot
+#   DESCRIPTION:  Schedule system reboot
+#    PARAMETERS:  Time to reboot
+#       RETURNS:  Nothing
+#-------------------------------------------------------------------------------
+__do_reboot() {
+	TIME="${1}"
+
+	TMP=/tmp/rebootScript
+
+	echo '#!/bin/sh -x' > "${TMP}"
+	echo '' >> "${TMP}"
+	echo 'sudo shutdown -r "${TIME}" "Scheduled reboot"' >> "${TMP}"
+
+	chmod a+x "${TMP}"
+
+	screen -c /dev/null -S Reboot -t Reboot -d -m "${TMP}"
+
+}
+
+
 HOSTNAME=`hostname | cut -d\. -f1`
 
 HOSTVARS=`set | grep ^UBUNTU_UPDATE_HOSTS_PASS_ | cut -d= -f1`
@@ -43,8 +91,16 @@ for HOSTVAR in ${HOSTVARS}; do
 
 			test -x /etc/update-motd.d/98-reboot-required \
 			&& REBOOT_NEEDED=`sudo /etc/update-motd.d/98-reboot-required` \
-			| tee "${LOG}"
 			echo "${REBOOT_NEEDED}"
+
+			if [ `echo "${REBOOT_NEEDED}" | grep 'System restart required' | wc -l` -gt 0 ]; then
+				__prompt_user DO_REBOOT "Schedule reboot?" "No"
+				DO_REBOOT=`echo "${DO_REBOOT}" | cut -c-1 | tr 'y' 'Y'`
+				if [ "${DO_REBOOT}" = "Y" ]; then
+					__prompt_user REBOOT_TIME "Reboot time?" "4:00"
+					__do_reboot "${REBOOT_TIME}"
+				fi
+			fi
 
 		else
 			echo "Updating remote host $HOST"
@@ -60,40 +116,4 @@ done
 exit 0
 
 
-
-
-
-
-
-
-
-if ping -c 1 8.8.8.8 >/dev/null 2>&1; then
-	:
-else
-	echo "'${0}' '${1}' '${2}' '${3}' '${4}'" | at now + 1 minute >/dev/null 2>&1
-	exit 0 # die 1 "No networking; will retry in 1 minute."
-fi
-
-test "${APIKEY}" || die 1 "No API key read from /etc/default/ifttt_api_key"
-
-test "${1}" && EVENT="${1}"
-test "${2}" && V1="${2}"
-test "${3}" && V2="${3}"
-test "${4}" && V3="${4}"
-
-test "${APIKEY}" || die 1 "No even specified on command line (or read from /etc/default/ifttt_api_key)"
-
-# If we don't have values, set some defaults
-test "${EVENT}" || EVENT="hostalert"
-test "${V1}" || V1=`hostname`
-test "${V2}" || V2=`date "+%Y-%m-%d"`
-test "${V3}" || V3=`date "+%H:%M"`
-
-# Compile the URL and JSON data
-URL="https://maker.ifttt.com/trigger/${EVENT}/with/key/${APIKEY}"
-JSON='{"value1":"'"${V1}"'","value2":"'"${V2}"'","value3":"'"${V3}"'"}'
-
-# Fire!
-curl --silent -X POST -H "Content-Type: application/json" -d "${JSON}" "${URL}" \
-| grep -v "Congratulations! You've fired the ${EVENT} event"
 
