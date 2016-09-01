@@ -2,15 +2,25 @@
 <!--- Project=BKs-Ubuntu-Scripts --->
 <!--- MajorVersion=0 --->
 <!--- MinorVersion=2 --->
-<!--- PackageVersion=1 --->
+<!--- PackageVersion=2 --->
 <!--- MaintainerName="Brian Kelly" --->
 <!--- MaintainerEmail=Github@Brian.Kelly.name --->
 <!--- Depends="perl (>= 5.14.2), mdadm (>= 3.2.5), lvm2 (>= 2.02.66)" --->
 <!--- Description="Various utility scripts for managing an Ubuntu Linux system" --->
 
-Scripts for managing LVM volumes on software RAID
+Scripts for managing Ubuntu Linux system.
 
-> This is my collection of scripts for managing my Ubuntu Linux systems
+update-ubuntu.sh
+================
+
+This script will use `apt-get` to update and upgrade (`update`, `dist-upgrade`,
+and `autoremove`) your system.  If the system requires a reboot, the script
+will prompt the user to schedule one and at what time.
+
+If the script is installed on multiple systems, and `ssh` keys are setup, the
+main system can be used to initiate updates on all the others.  To activate this
+mode, create a config file name `/etc/default/update-ubuntu` using the following
+example.
 
 ```
 UBUNTU_UPDATE_HOSTS_PASS_01="\
