@@ -80,11 +80,19 @@ for HOSTVAR in ${HOSTVARS}; do
 	echo ""
 	for HOST in ${HOSTS}; do
 		if [ `echo "${HOST}" | cut -d\. -f1` = "${HOSTNAME}" ]; then
-			echo "Updating local system"
+			echo ""
+			echo "Updating $HOSTNAME"
+			echo "Updating $HOSTNAME" | tr -c '[ \n]' '-'
+			echo ""
 
 			sudo apt-get dist-upgrade \
 			&& sudo apt-get autoremove \
 			|| die 1 "Update failed."
+
+			echo ""
+			echo "$HOSTNAME Update Complete"
+			echo "$HOSTNAME Update Complete" | tr -c '[ \n]' '-'
+			echo ""
 
 			test -x /etc/update-motd.d/98-fsck-at-reboot \
 			&& sudo /etc/update-motd.d/98-fsck-at-reboot
@@ -103,7 +111,11 @@ for HOSTVAR in ${HOSTVARS}; do
 			fi
 
 		else
+			echo ""
 			echo "Updating remote host $HOST"
+			echo "Updating remote host $HOST" | tr -c '[ \n]' '-'
+			echo ""
+
 			#ssh $HOST hostname
 			ssh -t $HOST `basename $0`
 		fi

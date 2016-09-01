@@ -76,3 +76,9 @@ done
 ####
 
 dpkg-deb --build "${NAME}" && rm -rf "${NAME}"
+
+####
+#### Add the package to Git
+####
+git add "${NAME}"*
+git status
