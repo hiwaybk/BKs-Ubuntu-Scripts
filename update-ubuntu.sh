@@ -1,5 +1,7 @@
 #!/bin/sh
 
+REBOOT_TIME=4:00
+
 # Source our config file, if it exists
 CONFIGFILE="/etc/default/update-ubuntu"
 [ -r "${CONFIGFILE}" ] && . "${CONFIGFILE}"
@@ -105,7 +107,7 @@ for HOSTVAR in ${HOSTVARS}; do
 				__prompt_user DO_REBOOT "Schedule reboot?" "No"
 				DO_REBOOT=`echo "${DO_REBOOT}" | cut -c-1 | tr 'y' 'Y'`
 				if [ "${DO_REBOOT}" = "Y" ]; then
-					__prompt_user REBOOT_TIME "Reboot time?" "4:00"
+					__prompt_user REBOOT_TIME "Reboot time?" "${REBOOT_TIME}"
 					__do_reboot "${REBOOT_TIME}"
 				fi
 			fi

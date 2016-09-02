@@ -1,8 +1,8 @@
 # BKs-Ubuntu-Scripts
 <!--- Project=BKs-Ubuntu-Scripts --->
 <!--- MajorVersion=0 --->
-<!--- MinorVersion=4 --->
-<!--- PackageVersion=5 --->
+<!--- MinorVersion=5 --->
+<!--- PackageVersion=1 --->
 <!--- MaintainerName="Brian Kelly" --->
 <!--- MaintainerEmail=Github@Brian.Kelly.name --->
 <!--- Depends="perl (>= 5.14.2), mdadm (>= 3.2.5), lvm2 (>= 2.02.66)" --->
@@ -23,6 +23,8 @@ mode, create a config file name `/etc/default/update-ubuntu` using the following
 example:
 
 ```
+REBOOT_TIME=4:00
+
 UBUNTU_UPDATE_HOSTS_PASS_01="\
 	chambers.mozart.hiwaybk.com \
 	mtcs.mozart.hiwaybk.com \
@@ -41,6 +43,8 @@ UBUNTU_UPDATE_HOSTS_PASS_03="\
 ```
 
 # ChangeLog
+* Version 0.5
+  1. Alloed the default REBOOT_TIME for the scheduled reboot promt to be set in `/etc/default/update-ubuntu`
 * Version 0.4
   1. Fixed error where scheduled reboot resulted in immediate reboot
   2. Updated package maintenace scripts
