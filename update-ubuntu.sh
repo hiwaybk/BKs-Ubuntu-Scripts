@@ -55,7 +55,7 @@ __do_reboot() {
 
 	echo '#!/bin/sh -x' > "${TMP}"
 	echo '' >> "${TMP}"
-	echo 'sudo shutdown -r "${TIME}" "Scheduled reboot"' >> "${TMP}"
+	echo 'sudo shutdown -r '"${TIME}"' "Scheduled reboot"' >> "${TMP}"
 
 	chmod a+x "${TMP}"
 
@@ -97,9 +97,9 @@ for HOSTVAR in ${HOSTVARS}; do
 			test -x /etc/update-motd.d/98-fsck-at-reboot \
 			&& sudo /etc/update-motd.d/98-fsck-at-reboot
 
-			test -x /etc/update-motd.d/98-reboot-required \
-			&& REBOOT_NEEDED=`sudo /etc/update-motd.d/98-reboot-required` \
-			echo "${REBOOT_NEEDED}"
+            test -x /etc/update-motd.d/98-reboot-required \
+            && REBOOT_NEEDED=`sudo /etc/update-motd.d/98-reboot-required` \
+            && echo "${REBOOT_NEEDED}"
 
 			if [ `echo "${REBOOT_NEEDED}" | grep 'System restart required' | wc -l` -gt 0 ]; then
 				__prompt_user DO_REBOOT "Schedule reboot?" "No"

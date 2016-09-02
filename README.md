@@ -1,8 +1,8 @@
 # BKs-Ubuntu-Scripts
 <!--- Project=BKs-Ubuntu-Scripts --->
 <!--- MajorVersion=0 --->
-<!--- MinorVersion=3 --->
-<!--- PackageVersion=1 --->
+<!--- MinorVersion=4 --->
+<!--- PackageVersion=5 --->
 <!--- MaintainerName="Brian Kelly" --->
 <!--- MaintainerEmail=Github@Brian.Kelly.name --->
 <!--- Depends="perl (>= 5.14.2), mdadm (>= 3.2.5), lvm2 (>= 2.02.66)" --->
@@ -41,6 +41,9 @@ UBUNTU_UPDATE_HOSTS_PASS_03="\
 ```
 
 # ChangeLog
+* Version 0.4
+  1. Fixed error where scheduled reboot resulted in immediate reboot
+  2. Updated package maintenace scripts
 * Version 0.3
   1. Cleaned up output
 * Version 0.2

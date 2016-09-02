@@ -31,7 +31,10 @@ NAME="${PACKAGE}_${VERSION}"
 ####
 
 if [ `ls -1 ${PACKAGE}*.deb 2>/dev/null | wc -l` -gt 0 ]; then
-    rm -rf `ls -1 ${PACKAGE}*.deb`
+	for x in ${PACKAGE}*.deb; do
+		rm -rf $x
+		git rm $x
+    done
 fi
 
 ####
