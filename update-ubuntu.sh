@@ -63,6 +63,8 @@ __do_reboot() {
 
 	screen -c /dev/null -S Reboot -t Reboot -d -m "${TMP}"
 
+	sleep 3
+
 }
 
 
@@ -107,6 +109,7 @@ for HOSTVAR in ${HOSTVARS}; do
 				__prompt_user DO_REBOOT "Schedule reboot?" "No"
 				DO_REBOOT=`echo "${DO_REBOOT}" | cut -c-1 | tr 'y' 'Y'`
 				if [ "${DO_REBOOT}" = "Y" ]; then
+					echo "Current time is" `date`
 					__prompt_user REBOOT_TIME "Reboot time?" "${REBOOT_TIME}"
 					__do_reboot "${REBOOT_TIME}"
 				fi
