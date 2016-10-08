@@ -2,7 +2,7 @@
 <!--- Project=BKs-Ubuntu-Scripts --->
 <!--- MajorVersion=0 --->
 <!--- MinorVersion=6 --->
-<!--- PackageVersion=0 --->
+<!--- PackageVersion=2 --->
 <!--- MaintainerName="Brian Kelly" --->
 <!--- MaintainerEmail=Github@Brian.Kelly.name --->
 <!--- Depends="perl (>= 5.14.2), mdadm (>= 3.2.5), lvm2 (>= 2.02.66)" --->
@@ -45,6 +45,7 @@ UBUNTU_UPDATE_HOSTS_PASS_03="\
 # ChangeLog
 * Version 0.6
   1. Changed the default response to "Yes" for the "Schedule reboot?" prompt
+  2. Added test to determine if a reboot is already scheduled before prompting.
 * Version 0.5
   1. Allowed the default REBOOT_TIME for the scheduled reboot promt to be set in `/etc/default/update-ubuntu`
   2. Added a 3 second delay after scheduling a reboot with screen to allow screen to detach properly

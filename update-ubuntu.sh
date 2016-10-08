@@ -101,7 +101,10 @@ for HOSTVAR in ${HOSTVARS}; do
 			test -x /etc/update-motd.d/98-fsck-at-reboot \
 			&& sudo /etc/update-motd.d/98-fsck-at-reboot
 
-            test -x /etc/update-motd.d/98-reboot-required \
+            REBOOT_SCHEDULED=`ps -ef | grep -i shutdown | grep 'Scheduled reboot' | wc -l`
+
+            test "${REBOOT_SCHEDULED}" -lt 1 \
+            && test -x /etc/update-motd.d/98-reboot-required \
             && REBOOT_NEEDED=`sudo /etc/update-motd.d/98-reboot-required` \
             && echo "${REBOOT_NEEDED}"
 
