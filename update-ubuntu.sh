@@ -106,7 +106,7 @@ for HOSTVAR in ${HOSTVARS}; do
             && echo "${REBOOT_NEEDED}"
 
 			if [ `echo "${REBOOT_NEEDED}" | grep 'System restart required' | wc -l` -gt 0 ]; then
-				__prompt_user DO_REBOOT "Schedule reboot?" "No"
+				__prompt_user DO_REBOOT "Schedule reboot?" "Yes"
 				DO_REBOOT=`echo "${DO_REBOOT}" | cut -c-1 | tr 'y' 'Y'`
 				if [ "${DO_REBOOT}" = "Y" ]; then
 					echo "Current time is" `date`
