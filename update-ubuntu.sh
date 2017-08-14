@@ -98,17 +98,17 @@ for HOSTVAR in ${HOSTVARS}; do
 			echo "$HOSTNAME Update Complete" | tr -c '[ \n]' '-'
 			echo ""
 
-			test -x /etc/update-motd.d/98-fsck-at-reboot \
-			&& sudo /etc/update-motd.d/98-fsck-at-reboot
+#			test -x /etc/update-motd.d/98-fsck-at-reboot \
+#			&& sudo /etc/update-motd.d/98-fsck-at-reboot
 
             REBOOT_SCHEDULED=`ps -ef | grep -i shutdown | grep 'Scheduled reboot' | wc -l`
 
             test "${REBOOT_SCHEDULED}" -lt 1 \
-            && test -x /etc/update-motd.d/98-reboot-required \
-            && REBOOT_NEEDED=`sudo /etc/update-motd.d/98-reboot-required` \
-            && echo "${REBOOT_NEEDED}"
+            && test -r /var/run/reboot-required \
+            && REBOOT_NEEDED=`ls -l /var/run/reboot-required | cut -d\  -f 6-8` \
+            && echo "Reboot requested as of ${REBOOT_NEEDED}."
 
-			if [ `echo "${REBOOT_NEEDED}" | grep 'System restart required' | wc -l` -gt 0 ]; then
+			if [ "${REBOOT_NEEDED}" ]; then
 				__prompt_user DO_REBOOT "Schedule reboot?" "Yes"
 				DO_REBOOT=`echo "${DO_REBOOT}" | cut -c-1 | tr 'y' 'Y'`
 				if [ "${DO_REBOOT}" = "Y" ]; then

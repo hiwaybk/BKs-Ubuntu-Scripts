@@ -1,8 +1,8 @@
 # BKs-Ubuntu-Scripts
 <!--- Project=BKs-Ubuntu-Scripts --->
 <!--- MajorVersion=0 --->
-<!--- MinorVersion=6 --->
-<!--- PackageVersion=2 --->
+<!--- MinorVersion=7 --->
+<!--- PackageVersion=0 --->
 <!--- MaintainerName="Brian Kelly" --->
 <!--- MaintainerEmail=Github@Brian.Kelly.name --->
 <!--- Depends="perl (>= 5.14.2), mdadm (>= 3.2.5), lvm2 (>= 2.02.66)" --->
@@ -43,6 +43,9 @@ UBUNTU_UPDATE_HOSTS_PASS_03="\
 ```
 
 # ChangeLog
+* Version 0.7
+  1. Determine if reboot is requested by checking /var/run/reboot-required
+     directly instead of running /etc/update-motd.d/98-reboot-required
 * Version 0.6
   1. Changed the default response to "Yes" for the "Schedule reboot?" prompt
   2. Added test to determine if a reboot is already scheduled before prompting.
