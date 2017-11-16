@@ -83,11 +83,12 @@ for HOSTVAR in ${HOSTVARS}; do
 	echo "Starting $HOSTVAR: $HOSTS"
 	echo ""
 	for HOST in ${HOSTS}; do
-		if [ `echo "${HOST}" | cut -d\. -f1` = "${HOSTNAME}" ]; then
-			echo ""
-			echo "Updating $HOSTNAME"
-			echo "Updating $HOSTNAME" | tr -c '[ \n]' '-'
-			echo ""
+		echo ""
+		echo "Updating $HOST"
+		echo "Updating $HOST" | tr -c '[ \n]' '-'
+		if [ `echo "${HOST}" | cut -d\. -f1 | cut -d: -f1` = "${HOSTNAME}" ]; then
+
+			echo "Running local update on ${HOST}."
 
 			sudo apt-get dist-upgrade \
 			&& sudo apt-get autoremove \
@@ -119,21 +120,28 @@ for HOSTVAR in ${HOSTVARS}; do
 			fi
 
 		else
-			echo ""
-			echo "Updating remote host $HOST"
-			echo "Updating remote host $HOST" | tr -c '[ \n]' '-'
-			echo ""
+			echo "Running remote update on ${HOST}."
 
-			#ssh $HOST hostname
-			ssh -t $HOST `basename $0`
+			REMOTEHOST=`echo $HOST | cut -d: -f1`
+			PORT=`echo $HOST | cut -d: -f2 | cut -d\# -f1`
+			NAME=`echo $HOST | cut -d: -f2 | cut -d\# -f2`
+
+			if [ "${NAME}" = "${PORT}" ]; then
+				NAME="${HOST}"
+			fi
+
+			if [ "${PORT}" = "${HOST}" ]; then
+				PORT=""
+			fi
+
+			if [ -n "${PORT}" ]; then
+				PORT="-p ${PORT}"
+			fi
+
+			ssh ${PORT} -t $REMOTEHOST `basename $0`
 		fi
 		echo ""
 	done
 done
 
-
-
 exit 0
-
-
-

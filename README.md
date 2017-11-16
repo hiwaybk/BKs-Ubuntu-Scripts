@@ -1,7 +1,7 @@
 # BKs-Ubuntu-Scripts
 <!--- Project=BKs-Ubuntu-Scripts --->
 <!--- MajorVersion=0 --->
-<!--- MinorVersion=7 --->
+<!--- MinorVersion=8 --->
 <!--- PackageVersion=1 --->
 <!--- MaintainerName="Brian Kelly" --->
 <!--- MaintainerEmail=Github@Brian.Kelly.name --->
@@ -27,7 +27,7 @@ REBOOT_TIME=4:00
 
 UBUNTU_UPDATE_HOSTS_PASS_01="\
 	chambers.mozart.hiwaybk.com \
-	mtcs.mozart.hiwaybk.com \
+	localhost:3422#mtcs \
 	sullivan.mozart.hiwaybk.com \
 "
 
@@ -43,6 +43,8 @@ UBUNTU_UPDATE_HOSTS_PASS_03="\
 ```
 
 # ChangeLog
+* Version 0.8
+  1. Added support for port numbers and using localhost with remote systems
 * Version 0.7
   1. Determine if reboot is requested by checking /var/run/reboot-required
      directly instead of running /etc/update-motd.d/98-reboot-required
