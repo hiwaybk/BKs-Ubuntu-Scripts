@@ -31,9 +31,11 @@ NAME="${PACKAGE}_${VERSION}"
 ####
 
 if [ `ls -1 ${PACKAGE}*.deb 2>/dev/null | wc -l` -gt 0 ]; then
-	for x in ${PACKAGE}*.deb; do
-		rm -rf $x
-		git rm $x
+    for x in ${PACKAGE}*.deb; do
+        rm -rf $x
+        if [ -d .git ]; then
+            git rm $x
+        fi
     done
 fi
 
@@ -41,7 +43,6 @@ fi
 #### Create the file structure for the package
 ####
 
-mkdir -p "${NAME}/usr/local/scripts"
 mkdir -p "${NAME}/DEBIAN"
 
 ####
@@ -63,6 +64,7 @@ cat README.md | grep '^> ' | sed -e 's/^> / /' >> "${CONTROL}"
 #### Let's put some stuff into the file structure...
 ####
 
+mkdir -p "${NAME}/usr/local/scripts"
 cp update-ubuntu.sh "${NAME}/usr/local/scripts"
 
 ####
@@ -70,8 +72,8 @@ cp update-ubuntu.sh "${NAME}/usr/local/scripts"
 ####
 
 for SCRIPT in postinst prerm; do
-	test -r "package_scripts/${SCRIPT}" \
-	&& cp "package_scripts/${SCRIPT}" "${NAME}/DEBIAN"
+    test -r "package_scripts/${SCRIPT}" \
+    && cp "package_scripts/${SCRIPT}" "${NAME}/DEBIAN"
 done
 
 ####
@@ -81,7 +83,9 @@ done
 dpkg-deb --build "${NAME}" && rm -rf "${NAME}"
 
 ####
-#### Add the package to Git
+#### If this is a Git repository, add the package & show the current status
 ####
-git add "${NAME}"*
-git status
+if [ -d .git ]; then
+    git add "${NAME}"*
+    git status
+fi
